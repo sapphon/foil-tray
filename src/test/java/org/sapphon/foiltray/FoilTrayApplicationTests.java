@@ -7,7 +7,27 @@ import org.springframework.boot.test.context.SpringBootTest;
 class FoilTrayApplicationTests {
 
 	@Test
-	void contextLoads() {
+	public void contextLoads() {
+	}
+
+	@Test
+	public void testCannotSubmitAnAnimationForAGameThatDoesNotExist(){
+
+	}
+
+	@Test
+	public void testCannotSubmitAnAnimationForAMotionThatDoesNotExist(){
+
+	}
+
+	@Test
+	public void testCannotSubmitAnAnimationForACharacterThatDoesNotExist(){
+
+	}
+
+	@Test
+	public void testCanSubmitAOneFileCharacterAnimation() {
+
 	}
 
 }
