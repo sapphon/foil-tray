@@ -1,15 +1,16 @@
 package org.sapphon.foiltray;
 
 
-import com.sun.tools.javac.util.List;
-
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import java.io.File;
+import java.util.List;
 
 @Entity
 public class CharacterAnimation {
     @Id
+    @GeneratedValue
     int id;
 
     Game game;
