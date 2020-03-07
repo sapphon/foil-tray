@@ -1,9 +1,7 @@
 package org.sapphon.foiltray;
 
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.io.File;
 import java.util.List;
 
@@ -13,12 +11,14 @@ public class CharacterAnimation {
     @GeneratedValue
     int id;
 
-    Game game;
+    @ManyToOne
+    public Game game;
 
-    Character character;
+    //Character character;
 
+    @ElementCollection
     List<File> frames;
 
-    AnimationMotion motion;
+    //AnimationMotion motion;
 
 }
