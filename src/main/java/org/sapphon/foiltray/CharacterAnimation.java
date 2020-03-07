@@ -1,11 +1,16 @@
 package org.sapphon.foiltray;
 
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+
 import javax.persistence.*;
 import java.io.File;
 import java.util.List;
 
 @Entity
+@Data
+@AllArgsConstructor
 public class CharacterAnimation {
     @Id
     @GeneratedValue
@@ -14,11 +19,13 @@ public class CharacterAnimation {
     @ManyToOne
     public Game game;
 
-    //Character character;
+    @ManyToOne
+    Character character;
 
     @ElementCollection
     List<File> frames;
 
-    //AnimationMotion motion;
+    @ManyToOne
+    AnimationMotion motion;
 
 }
