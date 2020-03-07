@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 @Controller
 public class CharacterArtController {
     @GetMapping
-    public CharacterAnimation getAllCharacterArt(){
+    public CharacterAnimation getAllCharacterArt() {
         return null;
     }
 }
