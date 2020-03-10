@@ -1,25 +1,23 @@
 package org.sapphon.foiltray;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.validation.constraints.NotNull;
 
 @Entity
 @Data
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class Character {
     @Id
     @GeneratedValue
     int id;
 
-    @NotNull
+    @NonNull
     String name;
 
-    public Character(String name){
-        this.name = name;
-    }
+    public Character(){}
 }
