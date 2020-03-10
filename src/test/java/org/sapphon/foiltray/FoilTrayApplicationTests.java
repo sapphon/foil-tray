@@ -10,44 +10,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
 class FoilTrayApplicationTests {
-
-    @Autowired
-    CharacterAnimationRepository characterAnimationRepository;
-
-    @Autowired
-    AnimationMotionRepository animationMotionRepository;
-
-    @Autowired
-    CharacterRepository characterRepository;
-
-    @Autowired
-    GameRepository gameRepository;
-
     @Test
     public void contextLoads() {
-    }
-
-    @Test
-    public void testCannotSubmitAnAnimationForAGameThatDoesNotExist() {
-        gameRepository.deleteAll();
-        characterRepository.save(new Character("Billy"));
-        animationMotionRepository.save(new AnimationMotion("idle"));
-
-    }
-
-    @Test
-    public void testCannotSubmitAnAnimationForAMotionThatDoesNotExist() {
-
-    }
-
-    @Test
-    public void testCannotSubmitAnAnimationForACharacterThatDoesNotExist() {
-
-    }
-
-    @Test
-    public void testCanSubmitAOneFileCharacterAnimation() {
-
     }
 
 }
