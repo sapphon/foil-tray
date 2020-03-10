@@ -1,12 +1,12 @@
 package org.sapphon.foiltray;
 
-import lombok.*;
-import org.springframework.beans.factory.annotation.Required;
+import lombok.Data;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.validation.constraints.NotNull;
 
 @Entity
 @Data
@@ -19,5 +19,6 @@ public class Game {
     @NonNull
     String name;
 
-    public Game(){}
+    public Game() {
+    }
 }

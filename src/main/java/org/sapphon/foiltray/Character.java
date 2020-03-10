@@ -19,5 +19,6 @@ public class Character {
     @NonNull
     String name;
 
-    public Character(){}
+    public Character() {
+    }
 }

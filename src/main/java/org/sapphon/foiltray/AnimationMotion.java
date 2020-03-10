@@ -19,7 +19,7 @@ public class AnimationMotion {
     @NotNull
     String motionName;
 
-    public AnimationMotion(String motionName){
+    public AnimationMotion(String motionName) {
         this.motionName = motionName;
     }
 }
