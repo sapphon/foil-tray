@@ -2,6 +2,8 @@ package org.sapphon.foiltray;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -10,16 +12,14 @@ import javax.validation.constraints.NotNull;
 
 @Entity
 @Data
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class AnimationMotion {
     @Id
     @GeneratedValue
     int id;
 
-    @NotNull
-    String motionName;
+    @NonNull
+    String name;
 
-    public AnimationMotion(String motionName) {
-        this.motionName = motionName;
-    }
+    public AnimationMotion(){}
 }
