@@ -1,4 +1,4 @@
-package org.sapphon.foiltray;
+package org.sapphon.foiltray.model;
 
 
 import lombok.AllArgsConstructor;

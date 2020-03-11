@@ -1,4 +1,4 @@
-package org.sapphon.foiltray;
+package org.sapphon.foiltray.model;
 
 import lombok.Data;
 import lombok.NonNull;
@@ -11,7 +11,7 @@ import javax.persistence.Id;
 @Entity
 @Data
 @RequiredArgsConstructor
-public class Game {
+public class Character {
     @Id
     @GeneratedValue
     int id;
@@ -19,6 +19,6 @@ public class Game {
     @NonNull
     String name;
 
-    public Game() {
+    public Character() {
     }
 }

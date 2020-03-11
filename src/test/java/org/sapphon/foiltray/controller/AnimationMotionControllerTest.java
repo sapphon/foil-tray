@@ -1,7 +1,7 @@
 package org.sapphon.foiltray.controller;
 
 import org.junit.jupiter.api.Test;
-import org.sapphon.foiltray.AnimationMotion;
+import org.sapphon.foiltray.model.AnimationMotion;
 import org.sapphon.foiltray.repository.AnimationMotionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;

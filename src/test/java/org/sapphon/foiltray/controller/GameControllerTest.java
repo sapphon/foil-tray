@@ -1,7 +1,7 @@
 package org.sapphon.foiltray.controller;
 
 import org.junit.jupiter.api.Test;
-import org.sapphon.foiltray.Game;
+import org.sapphon.foiltray.model.Game;
 import org.sapphon.foiltray.repository.GameRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;

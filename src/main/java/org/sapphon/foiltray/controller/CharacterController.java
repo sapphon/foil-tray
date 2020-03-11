@@ -1,6 +1,6 @@
 package org.sapphon.foiltray.controller;
 
-import org.sapphon.foiltray.Character;
+import org.sapphon.foiltray.model.Character;
 import org.sapphon.foiltray.repository.CharacterRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

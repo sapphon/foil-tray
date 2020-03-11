@@ -1,4 +1,4 @@
-package org.sapphon.foiltray;
+package org.sapphon.foiltray.model;
 
 import lombok.Data;
 import lombok.NonNull;
@@ -11,7 +11,7 @@ import javax.persistence.Id;
 @Entity
 @Data
 @RequiredArgsConstructor
-public class Character {
+public class AnimationMotion {
     @Id
     @GeneratedValue
     int id;
@@ -19,6 +19,5 @@ public class Character {
     @NonNull
     String name;
 
-    public Character() {
-    }
+    public AnimationMotion(){}
 }

@@ -1,6 +1,6 @@
 package org.sapphon.foiltray.controller;
 
-import org.sapphon.foiltray.AnimationMotion;
+import org.sapphon.foiltray.model.AnimationMotion;
 import org.sapphon.foiltray.repository.AnimationMotionRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

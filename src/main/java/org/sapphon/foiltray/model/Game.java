@@ -1,6 +1,5 @@
-package org.sapphon.foiltray;
+package org.sapphon.foiltray.model;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -8,12 +7,11 @@ import lombok.RequiredArgsConstructor;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.validation.constraints.NotNull;
 
 @Entity
 @Data
 @RequiredArgsConstructor
-public class AnimationMotion {
+public class Game {
     @Id
     @GeneratedValue
     int id;
@@ -21,5 +19,6 @@ public class AnimationMotion {
     @NonNull
     String name;
 
-    public AnimationMotion(){}
+    public Game() {
+    }
 }

@@ -1,6 +1,6 @@
 package org.sapphon.foiltray.controller;
 
-import org.sapphon.foiltray.CharacterAnimation;
+import org.sapphon.foiltray.model.CharacterAnimation;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 

@@ -1,6 +1,6 @@
 package org.sapphon.foiltray.controller;
 
-import org.sapphon.foiltray.Game;
+import org.sapphon.foiltray.model.Game;
 import org.sapphon.foiltray.repository.GameRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
