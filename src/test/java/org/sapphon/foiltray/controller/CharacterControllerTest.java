@@ -25,25 +25,25 @@ public class CharacterControllerTest {
     private CharacterRepository characterRepository;
 
     @Test
-    public void testGetGameByNameFailsIfGameIsNotFound() throws Exception {
+    public void testGetCharacterByNameFailsIfGameIsNotFound() throws Exception {
         mockMvc.perform(get("/api/v1/character/ooptydoo")).andExpect(status().isBadRequest());
     }
 
     @Test
-    public void testCanGetGameByName() throws Exception {
+    public void testCanGetCharacterByName() throws Exception {
         when(characterRepository.findByName("ooptydoo")).thenReturn(new Character("ooptydoo"));
         String resultBody = mockMvc.perform(get("/api/v1/character/ooptydoo")).andExpect(status().isOk()).andReturn().getResponse().getContentAsString();
         assertThat(resultBody).isEqualTo("{\"id\":0,\"name\":\"ooptydoo\"}");
     }
 
     @Test
-    public void testPostNewGameFailsIfOneWithThatNameExists() throws Exception {
+    public void testPostNewCharacterFailsIfOneWithThatNameExists() throws Exception {
         when(characterRepository.findByName("doopdoop")).thenReturn(new Character("doopdoop"));
         mockMvc.perform(post("/api/v1/character").contentType(MediaType.APPLICATION_JSON).content("{name:\"doopdoop\"}")).andExpect(status().isBadRequest());
     }
 
     @Test
-    public void testCanPostNewGame() throws Exception {
+    public void testCanPostNewCharacter() throws Exception {
         mockMvc.perform(post("/api/v1/character")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{\"name\":\"doopdoop\"}")).andExpect(status().isOk());
