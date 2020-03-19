@@ -1,7 +1,7 @@
 package org.sapphon.foiltray.controller;
 
 import org.junit.jupiter.api.Test;
-import org.sapphon.foiltray.model.Character;
+import org.sapphon.foiltray.model.Persona;
 import org.sapphon.foiltray.repository.CharacterRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -31,14 +31,14 @@ public class CharacterControllerTest {
 
     @Test
     public void testCanGetCharacterByName() throws Exception {
-        when(characterRepository.findByName("ooptydoo")).thenReturn(new Character("ooptydoo"));
+        when(characterRepository.findByName("ooptydoo")).thenReturn(new Persona("ooptydoo"));
         String resultBody = mockMvc.perform(get("/api/v1/character/ooptydoo")).andExpect(status().isOk()).andReturn().getResponse().getContentAsString();
         assertThat(resultBody).isEqualTo("{\"id\":0,\"name\":\"ooptydoo\"}");
     }
 
     @Test
     public void testPostNewCharacterFailsIfOneWithThatNameExists() throws Exception {
-        when(characterRepository.findByName("doopdoop")).thenReturn(new Character("doopdoop"));
+        when(characterRepository.findByName("doopdoop")).thenReturn(new Persona("doopdoop"));
         mockMvc.perform(post("/api/v1/character").contentType(MediaType.APPLICATION_JSON).content("{name:\"doopdoop\"}")).andExpect(status().isBadRequest());
     }
 
@@ -47,6 +47,6 @@ public class CharacterControllerTest {
         mockMvc.perform(post("/api/v1/character")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{\"name\":\"doopdoop\"}")).andExpect(status().isOk());
-        verify(characterRepository).save(new Character("doopdoop"));
+        verify(characterRepository).save(new Persona("doopdoop"));
     }
 }

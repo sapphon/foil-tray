@@ -4,7 +4,7 @@ import org.sapphon.foiltray.controller.request.CharacterAnimationRequest;
 import org.sapphon.foiltray.model.AnimationMotion;
 import org.sapphon.foiltray.model.CharacterAnimation;
 import org.sapphon.foiltray.model.Game;
-import org.sapphon.foiltray.model.Character;
+import org.sapphon.foiltray.model.Persona;
 import org.sapphon.foiltray.repository.AnimationMotionRepository;
 import org.sapphon.foiltray.repository.CharacterAnimationRepository;
 import org.sapphon.foiltray.repository.CharacterRepository;
@@ -33,7 +33,7 @@ public class CharacterAnimationController {
     @GetMapping("/api/v1/art/character")
     public ResponseEntity getCharacterAnimation(CharacterAnimationRequest request) {
         Optional<Game> game = gameRepository.findById(request.getGameId());
-        Optional<Character> character = characterRepository.findById(request.getCharacterId());
+        Optional<Persona> character = characterRepository.findById(request.getCharacterId());
         Optional<AnimationMotion> motion = motionRepository.findById(request.getMotionId());
 
         if (game.isPresent() && character.isPresent() && motion.isPresent()) {

@@ -4,7 +4,7 @@ import org.junit.jupiter.api.Test;
 import org.sapphon.foiltray.model.AnimationMotion;
 import org.sapphon.foiltray.model.CharacterAnimation;
 import org.sapphon.foiltray.model.Game;
-import org.sapphon.foiltray.model.Character;
+import org.sapphon.foiltray.model.Persona;
 import org.sapphon.foiltray.repository.AnimationMotionRepository;
 import org.sapphon.foiltray.repository.CharacterAnimationRepository;
 import org.sapphon.foiltray.repository.CharacterRepository;
@@ -43,7 +43,7 @@ public class CharacterAnimationControllerTest {
     @Test
     public void testCannotGetAnAnimationForAGameThatDoesNotExist() throws Exception {
         when(gameRepository.findById(any())).thenReturn(Optional.empty());
-        when(characterRepository.findById(any())).thenReturn(Optional.of(new Character(2, "b")));
+        when(characterRepository.findById(any())).thenReturn(Optional.of(new Persona(2, "b")));
         when(motionRepository.findById(any())).thenReturn(Optional.of(new AnimationMotion(3, "c")));
 
         mockMvc.perform(get("/api/v1/art/character").queryParam("gameId", "1").queryParam("characterId", "2").queryParam("motionId", "3")).andExpect(status().isBadRequest());
@@ -52,7 +52,7 @@ public class CharacterAnimationControllerTest {
     @Test
     public void testCannotGetAnAnimationForAMotionThatDoesNotExist() throws Exception {
         when(gameRepository.findById(any())).thenReturn(Optional.empty());
-        when(characterRepository.findById(any())).thenReturn(Optional.of(new Character(2, "b")));
+        when(characterRepository.findById(any())).thenReturn(Optional.of(new Persona(2, "b")));
         when(motionRepository.findById(any())).thenReturn(Optional.empty());
 
         mockMvc.perform(get("/api/v1/art/character").queryParam("gameId", "1").queryParam("characterId", "2").queryParam("motionId", "3")).andExpect(status().isBadRequest());
@@ -70,7 +70,7 @@ public class CharacterAnimationControllerTest {
     @Test
     public void testCannotGetANonExistentAnimation() throws Exception {
         when(gameRepository.findById(any())).thenReturn(Optional.of(new Game(1, "a")));
-        when(characterRepository.findById(any())).thenReturn(Optional.of(new Character(2, "b")));
+        when(characterRepository.findById(any())).thenReturn(Optional.of(new Persona(2, "b")));
         when(motionRepository.findById(any())).thenReturn(Optional.of(new AnimationMotion(3, "c")));
 
         when(characterAnimationRepository.findByGameAndCharacterAndMotion(any(), any(), any())).thenReturn(Optional.empty());
@@ -82,7 +82,7 @@ public class CharacterAnimationControllerTest {
     public void testCanGetOneAnimationCorrectly() throws Exception {
         Game expectedGame = new Game(1, "a");
         when(gameRepository.findById(1)).thenReturn(Optional.of(expectedGame));
-        Character expectedCharacter = new Character(2, "b");
+        Persona expectedCharacter = new Persona(2, "b");
         when(characterRepository.findById(2)).thenReturn(Optional.of(expectedCharacter));
         AnimationMotion expectedMotion = new AnimationMotion(3, "c");
         when(motionRepository.findById(3)).thenReturn(Optional.of(expectedMotion));

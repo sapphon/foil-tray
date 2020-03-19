@@ -10,7 +10,7 @@ import javax.persistence.Id;
 @Data
 @RequiredArgsConstructor
 @AllArgsConstructor
-public class Character {
+public class Persona {
     @Id
     @GeneratedValue
     int id;
@@ -18,6 +18,6 @@ public class Character {
     @NonNull
     String name;
 
-    public Character() {
+    public Persona() {
     }
 }

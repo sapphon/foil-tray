@@ -20,7 +20,7 @@ public class CharacterAnimation {
     public Game game;
 
     @ManyToOne
-    Character character;
+    Persona character;
 
     @ElementCollection
     List<File> frames;

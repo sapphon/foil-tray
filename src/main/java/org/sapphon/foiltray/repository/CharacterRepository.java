@@ -1,8 +1,8 @@
 package org.sapphon.foiltray.repository;
 
-import org.sapphon.foiltray.model.Character;
+import org.sapphon.foiltray.model.Persona;
 import org.springframework.data.repository.CrudRepository;
 
-public interface CharacterRepository extends CrudRepository<Character, Integer> {
-    Character findByName(String name);
+public interface CharacterRepository extends CrudRepository<Persona, Integer> {
+    Persona findByName(String name);
 }

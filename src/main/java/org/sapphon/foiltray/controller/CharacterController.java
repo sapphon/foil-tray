@@ -1,6 +1,6 @@
 package org.sapphon.foiltray.controller;
 
-import org.sapphon.foiltray.model.Character;
+import org.sapphon.foiltray.model.Persona;
 import org.sapphon.foiltray.repository.CharacterRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,14 +19,14 @@ public class CharacterController {
     }
 
     @GetMapping("/api/v1/character/{characterName}")
-    public ResponseEntity<Character> getGame(@PathVariable String characterName) {
-        Character found = characterRepository.findByName(characterName);
+    public ResponseEntity<Persona> getGame(@PathVariable String characterName) {
+        Persona found = characterRepository.findByName(characterName);
         return found != null ? ResponseEntity.ok(found) : new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 
     @PostMapping("api/v1/character")
-    public ResponseEntity postGame(@RequestBody Character incomingCharacter) {
-        Character found = characterRepository.findByName(incomingCharacter.getName());
+    public ResponseEntity postGame(@RequestBody Persona incomingCharacter) {
+        Persona found = characterRepository.findByName(incomingCharacter.getName());
         return found == null ? new ResponseEntity<>(characterRepository.save(incomingCharacter), HttpStatus.OK) : new ResponseEntity(HttpStatus.BAD_REQUEST);
     }
 }
