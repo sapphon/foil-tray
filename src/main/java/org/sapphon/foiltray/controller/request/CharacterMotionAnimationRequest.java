@@ -5,7 +5,8 @@ import lombok.Data;
 
 @Data
 @AllArgsConstructor
-public class CharacterAnimationRequest {
+public class CharacterMotionAnimationRequest {
     Integer gameId;
     Integer characterId;
+    Integer motionId;
 }

@@ -2,6 +2,7 @@ package org.sapphon.foiltray.controller;
 
 import org.sapphon.foiltray.controller.request.AnimationFrameRequest;
 import org.sapphon.foiltray.controller.request.CharacterAnimationRequest;
+import org.sapphon.foiltray.controller.request.CharacterMotionAnimationRequest;
 import org.sapphon.foiltray.model.AnimationMotion;
 import org.sapphon.foiltray.model.CharacterAnimation;
 import org.sapphon.foiltray.model.Game;
@@ -17,7 +18,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
+
+import static java.util.stream.Collectors.groupingBy;
 
 @Controller
 public class CharacterAnimationController {
@@ -33,7 +37,7 @@ public class CharacterAnimationController {
         this.gameRepository = gameRepository;
     }
 
-    private Optional<CharacterAnimation> getByRequest(CharacterAnimationRequest request) {
+    private Optional<CharacterAnimation> getByRequest(CharacterMotionAnimationRequest request) {
         Optional<Game> game = gameRepository.findById(request.getGameId());
         Optional<Persona> character = characterRepository.findById(request.getCharacterId());
         Optional<AnimationMotion> motion = motionRepository.findById(request.getMotionId());
@@ -43,8 +47,17 @@ public class CharacterAnimationController {
         } else return Optional.empty();
     }
 
+    private Optional<List<CharacterAnimation>> getByRequest(CharacterAnimationRequest request) {
+        Optional<Game> game = gameRepository.findById(request.getGameId());
+        Optional<Persona> character = characterRepository.findById(request.getCharacterId());
+
+        if (game.isPresent() && character.isPresent()) {
+            return Optional.of(characterAnimationRepository.findAllByGameAndCharacter(game.get(), character.get()));
+        } else return Optional.empty();
+    }
+
     @GetMapping("/api/v1/art/character")
-    public ResponseEntity getCharacterAnimation(CharacterAnimationRequest request) {
+    public ResponseEntity getCharacterAnimation(CharacterMotionAnimationRequest request) {
         Optional<CharacterAnimation> found = getByRequest(request);
         if (found.isPresent()) {
             return new ResponseEntity<>(found, HttpStatus.OK);
@@ -52,7 +65,7 @@ public class CharacterAnimationController {
     }
 
     @PostMapping("/api/v1/art/character/frame")
-    public ResponseEntity postFrame(CharacterAnimationRequest request, @RequestBody AnimationFrameRequest incomingFrame) {
+    public ResponseEntity postFrame(CharacterMotionAnimationRequest request, @RequestBody AnimationFrameRequest incomingFrame) {
         Optional<CharacterAnimation> foundMaybe = getByRequest(request);
         if (foundMaybe.isPresent()) {
             CharacterAnimation found = foundMaybe.get();
@@ -69,5 +82,15 @@ public class CharacterAnimationController {
             characterAnimationRepository.save(found);
             return new ResponseEntity<>(HttpStatus.OK);
         } else return new ResponseEntity(HttpStatus.BAD_REQUEST);
+    }
+
+    @GetMapping("/api/v1/art/character/all-motions")
+    public ResponseEntity getAllArtByCharacter(CharacterAnimationRequest request){
+        Optional<List<CharacterAnimation>> foundMaybe = getByRequest(request);
+        if(foundMaybe.isPresent()){
+            return ResponseEntity.ok(foundMaybe.get());
+        }else{
+            return ResponseEntity.badRequest().build();
+        }
     }
 }

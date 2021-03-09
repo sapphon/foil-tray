@@ -25,6 +25,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(controllers = CharacterAnimationController.class)
@@ -91,9 +92,11 @@ public class CharacterAnimationControllerTest {
         AnimationMotion expectedMotion = new AnimationMotion(3, "c");
         when(motionRepository.findById(3)).thenReturn(Optional.of(expectedMotion));
 
-        when(characterAnimationRepository.findByGameAndCharacterAndMotion(expectedGame, expectedCharacter, expectedMotion)).thenReturn(Optional.of(new CharacterAnimation(1, expectedGame, expectedCharacter, new ArrayList<String>(), expectedMotion)));
+        when(characterAnimationRepository.findByGameAndCharacterAndMotion(expectedGame, expectedCharacter, expectedMotion)).thenReturn(Optional.of(new CharacterAnimation(4, expectedGame, expectedCharacter, new ArrayList<String>(), expectedMotion)));
 
-        mockMvc.perform(get("/api/v1/art/character").queryParam("gameId", "1").queryParam("characterId", "2").queryParam("motionId", "3")).andExpect(status().isOk());
+        mockMvc.perform(get("/api/v1/art/character").queryParam("gameId", "1").queryParam("characterId", "2").queryParam("motionId", "3"))
+                .andExpect(status().isOk())
+        .andExpect(content().json("{\"id\":4,\"game\":{\"id\":1,\"name\":\"a\"},\"character\":{\"id\":2,\"name\":\"b\"},\"frames\":[],\"motion\":{\"id\":3,\"name\":\"c\"}}"));
     }
 
 
@@ -193,5 +196,30 @@ public class CharacterAnimationControllerTest {
                 .queryParam("characterId", "2")
                 .queryParam("motionId", "3")).andExpect(status().isOk());
         verify(characterAnimationRepository).save(new CharacterAnimation(1, expectedGame, expectedCharacter, Stream.of("a", "BBB", "c").collect(Collectors.toList()), expectedMotion));
+    }
+
+    @Test
+    public void testCanGetAllArtByCharacterAndGame() throws Exception{
+        Game expectedGame = new Game(1, "a");
+        when(gameRepository.findById(1)).thenReturn(Optional.of(expectedGame));
+        Persona expectedCharacter = new Persona(2, "b");
+        when(characterRepository.findById(2)).thenReturn(Optional.of(expectedCharacter));
+        AnimationMotion expectedMotion = new AnimationMotion(3, "c");
+        when(motionRepository.findById(3)).thenReturn(Optional.of(expectedMotion));
+        AnimationMotion expectedOtherMotion = new AnimationMotion(4, "d");
+        when(motionRepository.findById(4)).thenReturn(Optional.of(expectedOtherMotion));
+
+        when(characterAnimationRepository.findAllByGameAndCharacter(expectedGame, expectedCharacter))
+                .thenReturn(Stream.of(
+                        new CharacterAnimation(1, expectedGame, expectedCharacter, Stream.of("w", "d", "p").collect(Collectors.toList()), expectedMotion),
+                        new CharacterAnimation(2, expectedGame, expectedCharacter, Stream.of("z", "y", "x").collect(Collectors.toList()), expectedOtherMotion))
+                        .collect(Collectors.toList()));
+
+        mockMvc.perform(get("/api/v1/art/character/all-motions").queryParam("gameId", "1").queryParam("characterId", "2"))
+                .andExpect(status().isOk())
+                .andExpect(content().json("[" +
+                        "{\"id\":1,\"game\":{\"id\":1,\"name\":\"a\"},\"character\":{\"id\":2,\"name\":\"b\"},\"frames\":[\"w\",\"d\",\"p\"],\"motion\":{\"id\":3,\"name\":\"c\"}}," +
+                        "{\"id\":2,\"game\":{\"id\":1,\"name\":\"a\"},\"character\":{\"id\":2,\"name\":\"b\"},\"frames\":[\"z\",\"y\",\"x\"],\"motion\":{\"id\":4,\"name\":\"d\"}}" +
+                        "]"));
     }
 }
