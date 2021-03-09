@@ -9,11 +9,16 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(controllers = GameController.class)
@@ -48,5 +53,19 @@ public class GameControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{\"name\":\"doopdoop\"}")).andExpect(status().isOk());
         verify(gameRepository).save(new Game("doopdoop"));
+    }
+
+    @Test
+    public void testCanGetRoles() throws Exception {
+        List<String> roleNames = Stream.of("Character Artist", "Environment Artist", "Gameplay Designer", "Level Designer", "Sound Designer").collect(Collectors.toList());
+        mockMvc.perform(get("/api/v1/game/gameyboii/roles"))
+                .andExpect(content().json("{\"roleNames\":[" +
+                        "\"Character Artist\"," +
+                        "\"Environment Artist\"," +
+                        "\"Gameplay Designer\"," +
+                        "\"Level Designer\"," +
+                        "\"Sound Designer\"" +
+                        "]}"))
+                .andExpect(status().isOk());
     }
 }
