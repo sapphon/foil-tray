@@ -1,5 +1,6 @@
 package org.sapphon.foiltray.controller;
 
+import lombok.Data;
 import org.sapphon.foiltray.model.Persona;
 import org.sapphon.foiltray.repository.CharacterRepository;
 import org.springframework.http.HttpStatus;
@@ -15,6 +16,13 @@ import java.util.List;
 @Controller
 public class CharacterController {
     private final CharacterRepository characterRepository;
+
+    @Data
+    private class Characters{
+        List<Persona> characters;
+        public Characters(List<Persona> characters){ this.characters = characters; }
+
+    }
 
     public CharacterController(CharacterRepository characterRepository) {
         this.characterRepository = characterRepository;
@@ -36,8 +44,8 @@ public class CharacterController {
     }
 
     @GetMapping("/api/v1/characters")
-    public ResponseEntity<List<Persona>> getAllCharacters() {
-        return ResponseEntity.ok(characterRepository.findAll());
+    public ResponseEntity<Characters> getAllCharacters() {
+        return ResponseEntity.ok(new Characters(characterRepository.findAll()));
     }
 
     @PostMapping("api/v1/character")

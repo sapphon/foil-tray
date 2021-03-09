@@ -34,11 +34,11 @@ class FoilTrayApplicationTests {
 
     @Test
     public void testDefaultCharactersExist() throws Exception {
-        mockMvc.perform(get("/api/v1/characters")).andExpect(status().isOk()).andExpect(content().json("[" +
+        mockMvc.perform(get("/api/v1/characters")).andExpect(status().isOk()).andExpect(content().json("{\"characters\":[" +
                 "{\"id\":9,\"name\":\"Player\"}," +
                 "{\"id\":10,\"name\":\"Friend\"}," +
                 "{\"id\":11,\"name\":\"Enemy\"}" +
-                "]"));
+                "]}"));
     }
 
     @Test
