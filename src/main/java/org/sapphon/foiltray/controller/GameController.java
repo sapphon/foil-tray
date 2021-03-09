@@ -41,8 +41,8 @@ public class GameController {
         return found == null ? new ResponseEntity<>(gameRepository.save(incomingGame), HttpStatus.OK) : new ResponseEntity(HttpStatus.BAD_REQUEST);
     }
 
-    @GetMapping("/api/v1/game/{gameName}/roles")
-    public ResponseEntity<Roles> getRolesForGame(@PathVariable String gameName){
+    @GetMapping("/api/v1/roles")
+    public ResponseEntity<Roles> getRolesForGame(){
         return new ResponseEntity<>(new Roles(), HttpStatus.OK);
     }
 }

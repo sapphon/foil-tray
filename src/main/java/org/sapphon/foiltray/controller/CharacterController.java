@@ -10,18 +10,34 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import java.util.List;
+
 @Controller
 public class CharacterController {
     private final CharacterRepository characterRepository;
 
     public CharacterController(CharacterRepository characterRepository) {
         this.characterRepository = characterRepository;
+        if(characterRepository.count() == 0){
+            addDefaultCharacters(characterRepository);
+        }
+    }
+
+    private void addDefaultCharacters(CharacterRepository characterRepository) {
+        characterRepository.save(new Persona("Player"));
+        characterRepository.save(new Persona("Friend"));
+        characterRepository.save(new Persona("Enemy"));
     }
 
     @GetMapping("/api/v1/character/{characterName}")
     public ResponseEntity<Persona> getGame(@PathVariable String characterName) {
         Persona found = characterRepository.findByName(characterName);
         return found != null ? ResponseEntity.ok(found) : new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+    }
+
+    @GetMapping("/api/v1/characters")
+    public ResponseEntity<List<Persona>> getAllCharacters() {
+        return ResponseEntity.ok(characterRepository.findAll());
     }
 
     @PostMapping("api/v1/character")

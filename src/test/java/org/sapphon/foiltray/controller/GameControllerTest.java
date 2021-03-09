@@ -54,18 +54,4 @@ public class GameControllerTest {
                 .content("{\"name\":\"doopdoop\"}")).andExpect(status().isOk());
         verify(gameRepository).save(new Game("doopdoop"));
     }
-
-    @Test
-    public void testCanGetRoles() throws Exception {
-        List<String> roleNames = Stream.of("Character Artist", "Environment Artist", "Gameplay Designer", "Level Designer", "Sound Designer").collect(Collectors.toList());
-        mockMvc.perform(get("/api/v1/game/gameyboii/roles"))
-                .andExpect(content().json("{\"roleNames\":[" +
-                        "\"Character Artist\"," +
-                        "\"Environment Artist\"," +
-                        "\"Gameplay Designer\"," +
-                        "\"Level Designer\"," +
-                        "\"Sound Designer\"" +
-                        "]}"))
-                .andExpect(status().isOk());
-    }
 }
