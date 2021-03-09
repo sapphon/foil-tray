@@ -12,8 +12,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(controllers = AnimationMotionController.class)
@@ -27,6 +26,11 @@ public class AnimationMotionControllerTest {
     @Test
     public void testGetMotionByNameFailsIfMotionIsNotFound() throws Exception {
         mockMvc.perform(get("/api/v1/motion/doing_jumping_jacks")).andExpect(status().isBadRequest());
+    }
+
+    @Test
+    public void testDeleteMotionByNameFailsIfMotionIsNotFound() throws Exception {
+        mockMvc.perform(delete("/api/v1/motion/doing_jumping_jacks")).andExpect(status().isBadRequest());
     }
 
     @Test
@@ -48,5 +52,14 @@ public class AnimationMotionControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{\"name\":\"doopdoop\"}")).andExpect(status().isOk());
         verify(motionRepository).save(new AnimationMotion("doopdoop"));
+    }
+
+    @Test
+    public void testCanDeleteExistingMotion() throws Exception {
+        when(motionRepository.findByName("doopdoop")).thenReturn(new AnimationMotion("doopdoop"));
+        mockMvc.perform(delete("/api/v1/motion/doopdoop")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("{\"name\":\"doopdoop\"}")).andExpect(status().isOk());
+        verify(motionRepository).delete(new AnimationMotion("doopdoop"));
     }
 }

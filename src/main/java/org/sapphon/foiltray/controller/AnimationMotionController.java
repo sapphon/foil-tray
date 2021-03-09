@@ -6,10 +6,7 @@ import org.sapphon.foiltray.repository.AnimationMotionRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -59,10 +56,19 @@ public class AnimationMotionController {
         return found == null ? new ResponseEntity<>(animationMotionRepository.save(incomingMotion), HttpStatus.OK) : new ResponseEntity(HttpStatus.BAD_REQUEST);
     }
 
-    @GetMapping("api/v1/motions")
+    @GetMapping("/api/v1/motions")
     public ResponseEntity<Motions> getMotions(){
         return new ResponseEntity<>(new Motions(StreamSupport
                 .stream(animationMotionRepository.findAll().spliterator(), false)
                 .collect(Collectors.toList())), HttpStatus.OK);
+    }
+
+    @DeleteMapping("/api/v1/motion/{motionName}")
+    public ResponseEntity deleteMotion(@PathVariable String motionName){
+        AnimationMotion found = animationMotionRepository.findByName(motionName);
+        if(found != null){
+            animationMotionRepository.delete(found);
+            return ResponseEntity.ok().build();
+        }else return ResponseEntity.badRequest().build();
     }
 }
