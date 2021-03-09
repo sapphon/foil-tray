@@ -25,7 +25,7 @@ public class AnimationMotionController {
         return found != null ? ResponseEntity.ok(found) : new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 
-    @PostMapping("api/v1/motion")
+    @PostMapping("/api/v1/motion")
     public ResponseEntity postMotion(@RequestBody AnimationMotion incomingMotion) {
         AnimationMotion found = animationMotionRepository.findByName(incomingMotion.getName());
         return found == null ? new ResponseEntity<>(animationMotionRepository.save(incomingMotion), HttpStatus.OK) : new ResponseEntity(HttpStatus.BAD_REQUEST);

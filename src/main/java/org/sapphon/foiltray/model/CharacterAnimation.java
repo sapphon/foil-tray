@@ -23,7 +23,7 @@ public class CharacterAnimation {
     Persona character;
 
     @ElementCollection
-    List<File> frames;
+    List<String> frames;
 
     @ManyToOne
     AnimationMotion motion;

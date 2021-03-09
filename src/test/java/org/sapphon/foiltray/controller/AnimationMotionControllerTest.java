@@ -33,7 +33,7 @@ public class AnimationMotionControllerTest {
     public void testCanGetMotionByName() throws Exception {
         when(motionRepository.findByName("ooptydoo")).thenReturn(new AnimationMotion("ooptydoo"));
         String resultBody = mockMvc.perform(get("/api/v1/motion/ooptydoo")).andExpect(status().isOk()).andReturn().getResponse().getContentAsString();
-        assertThat(resultBody).isEqualTo("{\"id\":0,\"name\":\"ooptydoo\"}");
+        assertThat(resultBody).contains("\"id\":0,\"name\":\"ooptydoo\"");
     }
 
     @Test

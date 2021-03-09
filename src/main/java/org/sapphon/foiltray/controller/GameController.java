@@ -25,7 +25,7 @@ public class GameController {
         return found != null ? ResponseEntity.ok(found) : new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 
-    @PostMapping("api/v1/game")
+    @PostMapping("/api/v1/game")
     public ResponseEntity postGame(@RequestBody Game incomingGame) {
         Game found = gameRepository.findByName(incomingGame.getName());
         return found == null ? new ResponseEntity<>(gameRepository.save(incomingGame), HttpStatus.OK) : new ResponseEntity(HttpStatus.BAD_REQUEST);

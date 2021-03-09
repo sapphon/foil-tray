@@ -2,14 +2,13 @@ package org.sapphon.foiltray.model;
 
 import lombok.*;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Data
 @RequiredArgsConstructor
-@AllArgsConstructor
 public class AnimationMotion {
     @Id
     @GeneratedValue
@@ -19,4 +18,9 @@ public class AnimationMotion {
     String name;
 
     public AnimationMotion(){}
+
+    public AnimationMotion(int id, String name){
+        this.id=id;
+        this.name=name;
+    }
 }

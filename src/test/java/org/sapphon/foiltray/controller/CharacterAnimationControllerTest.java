@@ -12,15 +12,19 @@ import org.sapphon.foiltray.repository.GameRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(controllers = CharacterAnimationController.class)
@@ -87,7 +91,7 @@ public class CharacterAnimationControllerTest {
         AnimationMotion expectedMotion = new AnimationMotion(3, "c");
         when(motionRepository.findById(3)).thenReturn(Optional.of(expectedMotion));
 
-        when(characterAnimationRepository.findByGameAndCharacterAndMotion(expectedGame, expectedCharacter, expectedMotion)).thenReturn(Optional.of(new CharacterAnimation(1, expectedGame, expectedCharacter, new ArrayList<File>(), expectedMotion)));
+        when(characterAnimationRepository.findByGameAndCharacterAndMotion(expectedGame, expectedCharacter, expectedMotion)).thenReturn(Optional.of(new CharacterAnimation(1, expectedGame, expectedCharacter, new ArrayList<String>(), expectedMotion)));
 
         mockMvc.perform(get("/api/v1/art/character").queryParam("gameId", "1").queryParam("characterId", "2").queryParam("motionId", "3")).andExpect(status().isOk());
     }
@@ -109,7 +113,85 @@ public class CharacterAnimationControllerTest {
     }
 
     @Test
-    public void testCanSubmitAOneFileCharacterAnimation() {
+    public void testCanAppendAFrameToAnEmptyCharacterAnimation() throws Exception {
+        Game expectedGame = new Game(1, "a");
+        when(gameRepository.findById(1)).thenReturn(Optional.of(expectedGame));
+        Persona expectedCharacter = new Persona(2, "b");
+        when(characterRepository.findById(2)).thenReturn(Optional.of(expectedCharacter));
+        AnimationMotion expectedMotion = new AnimationMotion(3, "c");
+        when(motionRepository.findById(3)).thenReturn(Optional.of(expectedMotion));
 
+        when(characterAnimationRepository.findByGameAndCharacterAndMotion(expectedGame, expectedCharacter, expectedMotion)).thenReturn(Optional.of(new CharacterAnimation(1, expectedGame, expectedCharacter, new ArrayList<String>(), expectedMotion)));
+
+        mockMvc.perform(post("/api/v1/art/character/frame")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("{\"frameData\":\"an image as a straaaaang\"}")
+                .queryParam("gameId", "1")
+                .queryParam("characterId", "2")
+                .queryParam("motionId", "3")).andExpect(status().isOk());
+        verify(characterAnimationRepository).save(any());
+    }
+
+    @Test
+    public void testCanAppendAFrameToTheEndOfACharacterAnimationWhenIndexIsUnspecified() throws Exception {
+        Game expectedGame = new Game(1, "a");
+        when(gameRepository.findById(1)).thenReturn(Optional.of(expectedGame));
+        Persona expectedCharacter = new Persona(2, "b");
+        when(characterRepository.findById(2)).thenReturn(Optional.of(expectedCharacter));
+        AnimationMotion expectedMotion = new AnimationMotion(3, "c");
+        when(motionRepository.findById(3)).thenReturn(Optional.of(expectedMotion));
+
+        when(characterAnimationRepository.findByGameAndCharacterAndMotion(expectedGame, expectedCharacter, expectedMotion)).thenReturn(Optional.of(new CharacterAnimation(1, expectedGame, expectedCharacter, Stream.of("a").collect(Collectors.toList()), expectedMotion)));
+
+        mockMvc.perform(post("/api/v1/art/character/frame")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("{\"frameData\":\"b\"}")
+                .queryParam("gameId", "1")
+                .queryParam("characterId", "2")
+                .queryParam("motionId", "3")).andExpect(status().isOk());
+        verify(characterAnimationRepository).save(new CharacterAnimation(1, expectedGame, expectedCharacter, Stream.of("a", "b").collect(Collectors.toList()), expectedMotion));
+    }
+
+    @Test
+    public void testCanInsertAFrameInACharacterAnimation() throws Exception {
+        Game expectedGame = new Game(1, "a");
+        when(gameRepository.findById(1)).thenReturn(Optional.of(expectedGame));
+        Persona expectedCharacter = new Persona(2, "b");
+        when(characterRepository.findById(2)).thenReturn(Optional.of(expectedCharacter));
+        AnimationMotion expectedMotion = new AnimationMotion(3, "c");
+        when(motionRepository.findById(3)).thenReturn(Optional.of(expectedMotion));
+
+        when(characterAnimationRepository.findByGameAndCharacterAndMotion(expectedGame, expectedCharacter, expectedMotion)).thenReturn(Optional.of(new CharacterAnimation(1, expectedGame, expectedCharacter, Stream.of("a").collect(Collectors.toList()), expectedMotion)));
+
+        mockMvc.perform(post("/api/v1/art/character/frame")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("{\"frameData\":\"b\"," +
+                        "\"sequenceNumber\":0," +
+                        "\"mode\":\"INSERT\"}")
+                .queryParam("gameId", "1")
+                .queryParam("characterId", "2")
+                .queryParam("motionId", "3")).andExpect(status().isOk());
+        verify(characterAnimationRepository).save(new CharacterAnimation(1, expectedGame, expectedCharacter, Stream.of("b", "a").collect(Collectors.toList()), expectedMotion));
+    }
+
+    @Test
+    public void testCanReplaceAFrameInACharacterAnimation_AndModeIsReplaceWhenUnspecified() throws Exception {
+        Game expectedGame = new Game(1, "a");
+        when(gameRepository.findById(1)).thenReturn(Optional.of(expectedGame));
+        Persona expectedCharacter = new Persona(2, "b");
+        when(characterRepository.findById(2)).thenReturn(Optional.of(expectedCharacter));
+        AnimationMotion expectedMotion = new AnimationMotion(3, "c");
+        when(motionRepository.findById(3)).thenReturn(Optional.of(expectedMotion));
+
+        when(characterAnimationRepository.findByGameAndCharacterAndMotion(expectedGame, expectedCharacter, expectedMotion)).thenReturn(Optional.of(new CharacterAnimation(1, expectedGame, expectedCharacter, Stream.of("a", "b", "c").collect(Collectors.toList()), expectedMotion)));
+
+        mockMvc.perform(post("/api/v1/art/character/frame")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("{\"frameData\":\"BBB\"," +
+                        "\"sequenceNumber\":1}")
+                .queryParam("gameId", "1")
+                .queryParam("characterId", "2")
+                .queryParam("motionId", "3")).andExpect(status().isOk());
+        verify(characterAnimationRepository).save(new CharacterAnimation(1, expectedGame, expectedCharacter, Stream.of("a", "BBB", "c").collect(Collectors.toList()), expectedMotion));
     }
 }
