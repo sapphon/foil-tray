@@ -47,6 +47,14 @@ public class DevelopmentTeamControllerTest {
     }
 
     @Test
+    public void testCanAddTeamWithParticipantWhoFitsRole() throws Exception {
+        String participantString = "{\"role\":\"Game Designer\", \"participantName\":\"Gary.  Gary?\"}";
+        String roleString = "{\"roleName\":\"Game Designer\"}";
+        when(teamRepository.findByName("the name")).thenReturn(Optional.empty());
+        mockMvc.perform(post("/api/v1/team/add").contentType(MediaType.APPLICATION_JSON).content("{\"name\":\"the name\", \"composition\":["+roleString+"], \"members\":["+participantString+"]}")).andExpect(status().isOk());
+    }
+
+    @Test
     public void testCannotAddTeamWithSameNameAsExistingTeam() throws Exception {
         when(teamRepository.findByName("the name")).thenReturn(Optional.of(new DevelopmentTeam(1, "the name", newArrayList(), newArrayList())));
         mockMvc.perform(post("/api/v1/team/add").contentType(MediaType.APPLICATION_JSON).content("{\"name\":\"the name\"}")).andExpect(status().isConflict());
@@ -54,7 +62,9 @@ public class DevelopmentTeamControllerTest {
     }
 
     @Test
-    public void testCannotAddTeamWithParticipantWhoIsNotReal() {
-        //TODO
+    public void testCannotAddTeamWithParticipantWhoDoesNotFitRoles() throws Exception {
+        String participantString = "{\"role\":\"Game Designer\", \"participantName\":\"Gary.  Gary?\"}";
+        when(teamRepository.findByName("the name")).thenReturn(Optional.empty());
+        mockMvc.perform(post("/api/v1/team/add").contentType(MediaType.APPLICATION_JSON).content("{\"name\":\"the name\", \"composition\":[], \"members\":["+participantString+"]}")).andExpect(status().isBadRequest());
     }
 }
