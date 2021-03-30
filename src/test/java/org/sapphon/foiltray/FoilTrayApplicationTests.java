@@ -28,7 +28,7 @@ class FoilTrayApplicationTests {
     @Test
     public void testDefaultMotionsExist() throws Exception {
         mockMvc.perform(get("/api/v1/motions")).andExpect(status().isOk()).andExpect(content().json("{" +
-                "\"animationMotions\":[{\"id\":1,\"name\":\"Idle\"},{\"id\":2,\"name\":\"Walk\"},{\"id\":3,\"name\":\"Jump\"},{\"id\":4,\"name\":\"Get Item\"},{\"id\":5,\"name\":\"Use Item\"},{\"id\":6,\"name\":\"Talk\"},{\"id\":7,\"name\":\"Hit\"},{\"id\":8,\"name\":\"Shoot\"}]" +
+                "\"animationMotions\":[{\"id\":1,\"name\":\"Idle\"},{\"id\":2,\"name\":\"Move\"},{\"id\":3,\"name\":\"Jump\"},{\"id\":4,\"name\":\"Get Item\"},{\"id\":5,\"name\":\"Use Item\"},{\"id\":6,\"name\":\"Talk\"},{\"id\":7,\"name\":\"Hit\"},{\"id\":8,\"name\":\"Shoot\"}]" +
                 "}"));
     }
 

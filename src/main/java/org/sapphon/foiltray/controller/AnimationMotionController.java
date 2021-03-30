@@ -35,7 +35,7 @@ public class AnimationMotionController {
 
     private void addDefaultMotions(AnimationMotionRepository repository) {
         repository.save(new AnimationMotion("Idle"));
-        repository.save(new AnimationMotion("Walk"));
+        repository.save(new AnimationMotion("Move"));
         repository.save(new AnimationMotion("Jump"));
         repository.save(new AnimationMotion("Get Item"));
         repository.save(new AnimationMotion("Use Item"));
