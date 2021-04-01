@@ -2,9 +2,11 @@ package org.sapphon.foiltray.model;
 
 import lombok.*;
 
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import java.util.List;
 
 @Entity
 @Data
@@ -17,6 +19,10 @@ public class Game {
 
     @NonNull
     String name;
+
+    @ElementCollection
+    List<String> backgroundImages;
+
 
     public Game() {
     }
