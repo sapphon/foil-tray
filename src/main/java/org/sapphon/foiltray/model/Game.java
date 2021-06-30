@@ -6,6 +6,7 @@ import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -21,7 +22,7 @@ public class Game {
     String name;
 
     @ElementCollection
-    List<String> backgroundImages;
+    List<String> backgroundImages = new ArrayList<String>();
 
 
     public Game() {

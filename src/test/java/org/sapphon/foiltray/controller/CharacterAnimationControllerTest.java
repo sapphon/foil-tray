@@ -74,7 +74,7 @@ public class CharacterAnimationControllerTest {
 
     @Test
     public void testCannotGetANonExistentAnimation() throws Exception {
-        when(gameRepository.findById(any())).thenReturn(Optional.of(new Game(1, "a")));
+        when(gameRepository.findById(any())).thenReturn(Optional.of(new Game("a")));
         when(characterRepository.findById(any())).thenReturn(Optional.of(new Persona(2, "b")));
         when(motionRepository.findById(any())).thenReturn(Optional.of(new AnimationMotion(3, "c")));
 
@@ -85,8 +85,8 @@ public class CharacterAnimationControllerTest {
 
     @Test
     public void testCanGetOneAnimationCorrectly() throws Exception {
-        Game expectedGame = new Game(1, "a");
-        when(gameRepository.findById(1)).thenReturn(Optional.of(expectedGame));
+        Game expectedGame = new Game("a");
+        when(gameRepository.findById(expectedGame.getId())).thenReturn(Optional.of(expectedGame));
         Persona expectedCharacter = new Persona(2, "b");
         when(characterRepository.findById(2)).thenReturn(Optional.of(expectedCharacter));
         AnimationMotion expectedMotion = new AnimationMotion(3, "c");
@@ -94,9 +94,9 @@ public class CharacterAnimationControllerTest {
 
         when(characterAnimationRepository.findByGameAndCharacterAndMotion(expectedGame, expectedCharacter, expectedMotion)).thenReturn(Optional.of(new CharacterAnimation(4, expectedGame, expectedCharacter, new ArrayList<String>(), expectedMotion)));
 
-        mockMvc.perform(get("/api/v1/art/character").queryParam("gameId", "1").queryParam("characterId", "2").queryParam("motionId", "3"))
+        mockMvc.perform(get("/api/v1/art/character").queryParam("gameId", Integer.toString(expectedGame.getId())).queryParam("characterId", "2").queryParam("motionId", "3"))
                 .andExpect(status().isOk())
-        .andExpect(content().json("{\"id\":4,\"game\":{\"id\":1,\"name\":\"a\"},\"character\":{\"id\":2,\"name\":\"b\"},\"frames\":[],\"motion\":{\"id\":3,\"name\":\"c\"}}"));
+        .andExpect(content().json("{\"id\":4,\"game\":{\"id\":0,\"name\":\"a\"},\"character\":{\"id\":2,\"name\":\"b\"},\"frames\":[],\"motion\":{\"id\":3,\"name\":\"c\"}}"));
     }
 
 
@@ -117,7 +117,7 @@ public class CharacterAnimationControllerTest {
 
     @Test
     public void testCanAppendAFrameToAnEmptyCharacterAnimation() throws Exception {
-        Game expectedGame = new Game(1, "a");
+        Game expectedGame = new Game("a");
         when(gameRepository.findById(1)).thenReturn(Optional.of(expectedGame));
         Persona expectedCharacter = new Persona(2, "b");
         when(characterRepository.findById(2)).thenReturn(Optional.of(expectedCharacter));
@@ -137,7 +137,7 @@ public class CharacterAnimationControllerTest {
 
     @Test
     public void testCanAppendAFrameToTheEndOfACharacterAnimationWhenIndexIsUnspecified() throws Exception {
-        Game expectedGame = new Game(1, "a");
+        Game expectedGame = new Game("a");
         when(gameRepository.findById(1)).thenReturn(Optional.of(expectedGame));
         Persona expectedCharacter = new Persona(2, "b");
         when(characterRepository.findById(2)).thenReturn(Optional.of(expectedCharacter));
@@ -157,7 +157,7 @@ public class CharacterAnimationControllerTest {
 
     @Test
     public void testCanInsertAFrameInACharacterAnimation() throws Exception {
-        Game expectedGame = new Game(1, "a");
+        Game expectedGame = new Game("a");
         when(gameRepository.findById(1)).thenReturn(Optional.of(expectedGame));
         Persona expectedCharacter = new Persona(2, "b");
         when(characterRepository.findById(2)).thenReturn(Optional.of(expectedCharacter));
@@ -179,7 +179,7 @@ public class CharacterAnimationControllerTest {
 
     @Test
     public void testCanReplaceAFrameInACharacterAnimation_AndModeIsReplaceWhenUnspecified() throws Exception {
-        Game expectedGame = new Game(1, "a");
+        Game expectedGame = new Game("a");
         when(gameRepository.findById(1)).thenReturn(Optional.of(expectedGame));
         Persona expectedCharacter = new Persona(2, "b");
         when(characterRepository.findById(2)).thenReturn(Optional.of(expectedCharacter));
@@ -200,8 +200,8 @@ public class CharacterAnimationControllerTest {
 
     @Test
     public void testCanGetAllArtByCharacterAndGame() throws Exception{
-        Game expectedGame = new Game(1, "a");
-        when(gameRepository.findById(1)).thenReturn(Optional.of(expectedGame));
+        Game expectedGame = new Game("a");
+        when(gameRepository.findById(0)).thenReturn(Optional.of(expectedGame));
         Persona expectedCharacter = new Persona(2, "b");
         when(characterRepository.findById(2)).thenReturn(Optional.of(expectedCharacter));
         AnimationMotion expectedMotion = new AnimationMotion(3, "c");
@@ -215,11 +215,11 @@ public class CharacterAnimationControllerTest {
                         new CharacterAnimation(2, expectedGame, expectedCharacter, Stream.of("z", "y", "x").collect(Collectors.toList()), expectedOtherMotion))
                         .collect(Collectors.toList()));
 
-        mockMvc.perform(get("/api/v1/art/character/all-motions").queryParam("gameId", "1").queryParam("characterId", "2"))
+        mockMvc.perform(get("/api/v1/art/character/all-motions").queryParam("gameId", Integer.toString(expectedGame.getId())).queryParam("characterId", "2"))
                 .andExpect(status().isOk())
                 .andExpect(content().json("[" +
-                        "{\"id\":1,\"game\":{\"id\":1,\"name\":\"a\"},\"character\":{\"id\":2,\"name\":\"b\"},\"frames\":[\"w\",\"d\",\"p\"],\"motion\":{\"id\":3,\"name\":\"c\"}}," +
-                        "{\"id\":2,\"game\":{\"id\":1,\"name\":\"a\"},\"character\":{\"id\":2,\"name\":\"b\"},\"frames\":[\"z\",\"y\",\"x\"],\"motion\":{\"id\":4,\"name\":\"d\"}}" +
+                        "{\"id\":1,\"game\":{\"id\":0,\"name\":\"a\"},\"character\":{\"id\":2,\"name\":\"b\"},\"frames\":[\"w\",\"d\",\"p\"],\"motion\":{\"id\":3,\"name\":\"c\"}}," +
+                        "{\"id\":2,\"game\":{\"id\":0,\"name\":\"a\"},\"character\":{\"id\":2,\"name\":\"b\"},\"frames\":[\"z\",\"y\",\"x\"],\"motion\":{\"id\":4,\"name\":\"d\"}}" +
                         "]"));
     }
 }

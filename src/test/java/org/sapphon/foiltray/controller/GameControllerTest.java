@@ -38,7 +38,7 @@ public class GameControllerTest {
     public void testCanGetGameByName() throws Exception {
         when(gameRepository.findByName("ooptydoo")).thenReturn(new Game("ooptydoo"));
         String resultBody = mockMvc.perform(get("/api/v1/game/ooptydoo")).andExpect(status().isOk()).andReturn().getResponse().getContentAsString();
-        assertThat(resultBody).isEqualTo("{\"id\":0,\"name\":\"ooptydoo\"}");
+        assertThat(resultBody).isEqualTo("{\"id\":0,\"name\":\"ooptydoo\",\"backgroundImages\":[]}");
     }
 
     @Test

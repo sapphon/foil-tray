@@ -38,7 +38,7 @@ public class CharacterController {
     }
 
     @GetMapping("/api/v1/character/{characterName}")
-    public ResponseEntity<Persona> getGame(@PathVariable String characterName) {
+    public ResponseEntity<Persona> getCharacterByName(@PathVariable String characterName) {
         Persona found = characterRepository.findByName(characterName);
         return found != null ? ResponseEntity.ok(found) : new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
@@ -49,7 +49,7 @@ public class CharacterController {
     }
 
     @PostMapping("api/v1/character")
-    public ResponseEntity postGame(@RequestBody Persona incomingCharacter) {
+    public ResponseEntity postCharacter(@RequestBody Persona incomingCharacter) {
         Persona found = characterRepository.findByName(incomingCharacter.getName());
         return found == null ? new ResponseEntity<>(characterRepository.save(incomingCharacter), HttpStatus.OK) : new ResponseEntity(HttpStatus.BAD_REQUEST);
     }
